@@ -1,5 +1,9 @@
 import { envConfig } from '@/config/env.config';
+import { ChartInfo } from '@/entities/chartInfo.entity';
+import { Datasource } from '@/entities/datasource.entity';
+import { User } from '@/entities/user.entity';
 import { DataSource, DataSourceOptions } from 'typeorm';
+import { join } from 'path';
 
 const databaseConfig: DataSourceOptions = {
   type: "postgres",
@@ -11,8 +15,8 @@ const databaseConfig: DataSourceOptions = {
   synchronize: false,
   logging: false,
   connectTimeoutMS: 0,
-  entities: ["src/entities/**/*.entity{.ts,.js}"],
-  migrations: ["src/database/migrations/**/*{.ts,.js}"],
+  entities: [User, ChartInfo, Datasource],
+  migrations: [join(__dirname, "../database/migrations/**/*{.ts,.js}")],
   ssl: envConfig.DB_SSL ? {
     rejectUnauthorized: false
   } : false
