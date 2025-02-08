@@ -54,7 +54,7 @@ async function bootstrap() {
       keys: [envConfig.SECRET_KEY_ONE, envConfig.SECRET_KEY_TWO],
       maxAge: 24 * 7 * 3600000,
       secure: envConfig.NODE_ENV === 'production',
-      sameSite: 'lax',
+      sameSite: 'none',
       httpOnly: true
     })
   );
@@ -67,10 +67,7 @@ async function bootstrap() {
 
   app.use(
     '/graphql',
-    cors({
-      ...corsOptions,
-      preflightContinue: true
-    }),
+    cors(corsOptions),
     json({ limit: '50mb' }),
     urlencoded({ extended: true, limit: '50mb' }),
     expressMiddleware(server, {
