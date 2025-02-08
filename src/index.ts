@@ -52,7 +52,10 @@ async function bootstrap() {
     cookieSession({
       name: 'session',
       keys: [envConfig.SECRET_KEY_ONE, envConfig.SECRET_KEY_TWO],
-      maxAge: 24 * 7 * 3600000
+      maxAge: 24 * 7 * 3600000,
+      secure: envConfig.NODE_ENV === 'production',
+      sameSite: 'lax',
+      httpOnly: true
     })
   );
   const corsOptions = {
@@ -64,7 +67,10 @@ async function bootstrap() {
 
   app.use(
     '/graphql',
-    cors(corsOptions),
+    cors({
+      ...corsOptions,
+      preflightContinue: true
+    }),
     json({ limit: '50mb' }),
     urlencoded({ extended: true, limit: '50mb' }),
     expressMiddleware(server, {
