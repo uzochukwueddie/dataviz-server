@@ -53,9 +53,11 @@ async function bootstrap() {
       name: 'session',
       keys: [envConfig.SECRET_KEY_ONE, envConfig.SECRET_KEY_TWO],
       maxAge: 24 * 7 * 3600000,
-      secure: envConfig.NODE_ENV === 'production',
-      sameSite: 'none',
-      httpOnly: true
+      secure: envConfig.NODE_ENV !== 'development',
+      ...(envConfig.NODE_ENV !== 'development' && {
+        sameSite: 'none'
+      }),
+      httpOnly: envConfig.NODE_ENV !== 'development'
     })
   );
   const corsOptions = {
